@@ -1,0 +1,30 @@
+/* Styling for the game board */
+#game-board {
+  border: 1px solid #000;
+}
+
+/* Styling for the grid */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(20, 20px);
+  grid-template-rows: repeat(20, 20px);
+  width: 400px;
+  height: 400px;
+}
+
+/* Styling for player shapes */
+.shape {
+  width: 20px;
+  height: 20px;
+  border: 1px solid #000;
+  box-sizing: border-box;
+  position: absolute;
+}
+
+.player1 {
+  background-color: #FF5733;
+}
+
+.player2 {
+  background-color: #337DFF;
+}

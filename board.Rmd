@@ -1,0 +1,102 @@
+---
+title: "board"
+output: 
+  html_document:
+    css: "./style.css"
+---
+
+
+
+
+# Create a 20 by 20 matrix of zeros.
+```{r}
+library(shiny)
+library(ggplot2)
+library(tidyverse)
+matrix <- matrix(rep(0, 400), nrow = 20, ncol = 20) %>% as.data.frame()
+```
+
+# Create a ggplot2 plot of the matrix.
+```{r}
+
+ggplot(data = matrix, aes(x = 1:ncol(matrix), y = 1:nrow(matrix))) +
+  geom_rect(xmin = -0.5, xmax = 0.5, ymin = -0.5, ymax = 0.5, fill = "white")
+# Set the aspect ratio of the plot to 1:1.
+theme_update(aspect.ratio = 1)
+
+# Display the plot.
+renderPlot({
+  ggplot(data = matrix, aes(x = 1:ncol(matrix), y = 1:nrow(matrix))) +
+    geom_rect(xmin = -0.5, xmax = 0.5, ymin = -0.5, ymax = 0.5, fill = "white") +
+    theme_update(aspect.ratio = 1)
+})
+```
+
+
+# creating shapes
+
+```{r}
+
+
+# Create a vector of coordinates for the vertices of the polygon.
+coordinates <- c(0, 0, 1, 0, 1, 1, 0.5, 1, 0, 0.5)
+
+# Create a ggplot2 plot of the polygon.
+ggplot() +
+  geom_polygon(x = coordinates[seq(1, length(coordinates), 2)], y = coordinates[seq(2, length(coordinates), 2)], fill = "red")+
+  geom_rect(xmin = 5, xmax = 6, ymin = 5, ymax = 6, fill = "white")
+
+```
+
+```{r}
+
+create_shape <- function() {
+  shape <- matrix(0, nrow = 5, ncol = 5)
+  shape[2:4, 2:4] <- 1
+  return(shape)
+}
+
+# Call the function to create a Blokus shape
+blokus_shape <- create_shape()
+
+plot_blokus_shape <- function(shape) {
+  data <- as.data.frame(which(shape == 1, arr.ind = TRUE))
+  
+  ggplot(data, aes(x = col, y = row)) +
+    geom_tile(fill = "blue", width = 1, height = 1) +
+    coord_fixed(ratio = 1) +
+    theme_void() +
+    theme(legend.position = "none")
+}
+
+# Plot the Blokus shape
+plot_blokus_shape(blokus_shape)
+```
+
+
+```{r}
+
+blokus_f_shape <- matrix(0, nrow = 5, ncol = 5)
+blokus_f_shape[1, 2:5] <- 1
+blokus_f_shape[2:4, 3] <- 1
+blokus_f_shape[3, 1:4] <- 1
+
+plot_blokus_shape(blokus_f_shape)
+
+blokus_o_shape <- matrix(1, nrow = 5, ncol = 5)
+blokus_o_shape[3,2:3]<- 1
+blokus_o_shape[4,2:3]<- 1
+plot_blokus_shape(blokus_o_shape)
+
+blokus_t_shape <- matrix(0, nrow = 5, ncol = 5)
+blokus_t_shape[3, 2:4] <- 1
+blokus_t_shape[2:4, 3] <- 1
+plot_blokus_shape(blokus_t_shape)
+
+blokus_z_shape <- matrix(0, nrow = 5, ncol = 5)
+blokus_z_shape[4, 2:3] <- 1
+blokus_z_shape[2:3, 3] <- 1
+blokus_z_shape[2, 4] <- 1
+plot_blokus_shape(blokus_z_shape)
+```
+
